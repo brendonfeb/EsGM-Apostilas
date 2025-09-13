@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[EsGM] Cursos</title>
+    
+    <link rel="icon" type="image/png" href="https://i.imgur.com/j0Wl6DQ.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'light-bg': '#f0f7ff', 
+                        'light-card': '#ffffff',
+                        'light-border': '#dbeafe',
+                        'light-text-primary': '#111827',
+                        'light-text-secondary': '#334155',
+                        'dark-bg': '#030712',
+                        'dark-card': '#0b1120',
+                        'dark-border': '#1e293b',
+                        'dark-text-primary': '#f9fafb',
+                        'dark-text-secondary': '#9ca3af',
+                        'brand-blue': '#2563eb',
+                        'brand-glow': 'rgba(37, 99, 235, 0.5)',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 1s ease-out forwards',
+                        'fade-in-down': 'fadeInDown 0.8s ease-out forwards',
+                        'modal-in': 'modalIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
+                        'spin': 'spin 1.5s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'aurora': 'aurora 20s infinite linear',
+                        'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
+                        'draw-check': 'drawCheck 0.5s ease-out forwards',
+                        'pulse-head': 'pulseHead 2s infinite ease-in-out',
+                        'title-fade-in-up': 'titleFadeInUp 0.7s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: { 'from': { opacity: 0, transform: 'translateY(15px)' }, 'to': { opacity: 1, transform: 'translateY(0)' } },
+                        fadeInUp: { 'from': { opacity: 0, transform: 'translateY(20px)' }, 'to': { opacity: 1, transform: 'translateY(0)' } },
+                        fadeInDown: { 'from': { opacity: 0, transform: 'translateY(-100%)' }, 'to': { opacity: 1, transform: 'translateY(0)' } },
+                        modalIn: { 'from': { opacity: 0, transform: 'scale(0.95) translateY(20px)' }, 'to': { opacity: 1, transform: 'scale(1) translateY(0)' } },
+                        spin: { 'to': { transform: 'rotate(360deg)' } },
+                        float: { 
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' }
+                        },
+                          aurora: {
+                            '0%': { transform: 'translateX(-50%) translateY(-50%) rotate(0deg) scale(1.2)' },
+                            '50%': { transform: 'translateX(-50%) translateY(-50%) rotate(180deg) scale(1.5)' },
+                            '100%': { transform: 'translateX(-50%) translateY(-50%) rotate(360deg) scale(1.2)' },
+                        },
+                        drawCheck: {
+                            'from': { 'stroke-dashoffset': '100' },
+                            'to': { 'stroke-dashoffset': '0' }
+                        },
+                        pulseHead: {
+                            '0%, 100%': { transform: 'translateX(-50%) scale(1)' },
+                            '50%': { transform: 'translateX(-50%) scale(1.2)' }
+                        },
+                        titleFadeInUp: {
+                            'from': {
+                                opacity: 0,
+                                transform: 'translateY(10px) skewY(2deg)',
+                                filter: 'blur(4px)',
+                            },
+                            'to': {
+                                opacity: 1,
+                                transform: 'translateY(0) skewY(0)',
+                                filter: 'blur(0)',
+                            }
+                        }
+                    }
+                },
+            },
+            plugins: [],
+        }
+    </script>
+    
+    <script>
+        (function() {
+            let theme = localStorage.getItem('theme') || 'dark';
+            if (theme === 'dark') document.documentElement.classList.add('dark');
+        })();
+    </script>
+
+    <style>
+        :root {
+            --scrollbar-track-bg: #0f172a;
+            --scrollbar-thumb-bg: #1e293b;
+        }
+        html.light {
+            --scrollbar-track-bg: #f0f7ff;
+            --scrollbar-thumb-bg: #dbeafe;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            color: var(--light-text-secondary);
+        }
+        html.dark body {
+            color: var(--dark-text-secondary);
+        }
+        
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background-color: var(--scrollbar-track-bg); }
+        ::-webkit-scrollbar-thumb { background-color: var(--scrollbar-thumb-bg); border-radius: 10px; border: 2px solid var(--scrollbar-track-bg); }
+
+        #preloader { position: fixed; inset: 0; z-index: 9999; background-color: #030712; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.8s ease; }
+        html.light #preloader { background-color: #f0f7ff; }
+        .preloader-hidden { opacity: 0; pointer-events: none; }
+        
+        .loader-container { position: relative; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; }
+        .loader-emblem { width: 70px; height: auto; animation: pulsate 2s ease-in-out infinite; }
+        #loader-text { transition: opacity 0.4s ease-in-out; min-height: 28px; }
+
+        @keyframes pulsate {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(0.95); opacity: 0.8; }
+        }
+
+        #sky-background { position: fixed; inset: 0; z-index: -2; overflow: hidden; background: linear-gradient(to bottom, #87CEEB 0%, #d1e9f2 100%); transition: background 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        html.light #sky-background { background: linear-gradient(to bottom, #f0f7ff 0%, #dbeafe 100%);}
+        html.dark #sky-background { background: linear-gradient(to bottom, #030712 0%, #111827 100%); }
+        
+        .aurora-container { position: absolute; inset: 0; opacity: 0; transition: opacity 1.5s ease; overflow: hidden; }
+        html.dark .aurora-container { opacity: 1; }
+        .aurora { position: absolute; left: 50%; top: 50%; width: 150vw; height: 150vw; border-radius: 50%; filter: blur(80px); mix-blend-mode: screen; }
+        .aurora-1 { background: radial-gradient(circle, #2563eb80, transparent 60%); animation: aurora 25s infinite linear reverse; }
+        .aurora-2 { background: radial-gradient(circle, #4c1d9580, transparent 60%); animation: aurora 30s infinite linear; }
+        
+        #celestial-container { position: absolute; top: 50%; left: 50%; width: 1px; height: 1px; }
+        #sun, #moon { position: absolute; left: 50%; top: 50%; border-radius: 50%; transition: transform 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); will-change: transform; }
+        #sun { width: 200px; height: 200px; margin: -100px 0 0 -100px; background: radial-gradient(circle, #FFFDE7 20%, #FFF59D 60%, #FFB300 100%); box-shadow: 0 0 100px 50px rgba(255, 245, 157, 0.5), 0 0 200px 100px rgba(255, 179, 0, 0.3); transform: translateY(-25vh); }
+        html.dark #sun { transform: translateY(100vh); }
+        #moon { width: 150px; height: 150px; margin: -75px 0 0 -75px; background: #f0f2f5; box-shadow: inset -25px -25px 0 0 #d1d5db, 0 0 50px 20px rgba(240, 242, 245, 0.3); transform: translateY(100vh); }
+        html.dark #moon { transform: translateY(-30vh); }
+        
+        #clouds { position: absolute; inset: 0; opacity: 1; transition: opacity 1.5s ease; }
+        html.dark #clouds { opacity: 0; }
+        .cloud { position: absolute; background: white; border-radius: 50%; opacity: 0.9; animation: move-clouds linear infinite; }
+        .cloud:before, .cloud:after { content: ''; position: absolute; background: white; border-radius: 50%; }
+        .cloud-1 { width: 200px; height: 60px; top: 15%; left: -250px; animation-duration: 40s; }
+        .cloud-1:before { width: 100px; height: 100px; top: -50px; left: 20px; }
+        .cloud-1:after { width: 130px; height: 130px; top: -70px; right: 10px; }
+        .cloud-2 { width: 300px; height: 80px; top: 25%; left: -350px; animation-duration: 60s; animation-delay: -10s; }
+        .cloud-2:before { width: 150px; height: 150px; top: -70px; left: 30px; }
+        .cloud-2:after { width: 180px; height: 180px; top: -90px; right: 20px; }
+        @keyframes move-clouds { from { transform: translateX(0); } to { transform: translateX(calc(100vw + 400px)); } }
+        
+        #stars { position: absolute; inset: 0; opacity: 0; transition: opacity 1.5s ease; z-index: -1; }
+        html.dark #stars { opacity: 1; }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle 4s infinite ease-in-out; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+
+        #header-nav { animation: fadeInDown 0.8s ease-out 1.2s both; }
+        #navbar { box-shadow: 0 4px 30px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.1); }
+        html.light #navbar { box-shadow: 0 4px 20px rgba(29, 78, 216, 0.1), inset 0 1px 1px rgba(255,255,255,0.5); }
+        
+        .nav-link { position: relative; color: #9ca3af; transition: color 0.3s; z-index: 1; }
+        html.light .nav-link { color: var(--light-text-secondary); }
+        .nav-link.active { color: #f9fafb; }
+        html.light .nav-link.active { color: #f9fafb; font-weight: 600; }
+        
+        #nav-active-bg {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background-image: linear-gradient(to right, #2563eb, #60a5fa);
+        }
+
+        .section-container { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 8rem 1rem; transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform, opacity; }
+        .section-inactive { opacity: 0; transform: scale(0.98); pointer-events: none; z-index: 1; }
+        .section-active { opacity: 1; transform: scale(1); pointer-events: auto; z-index: 10; }
+        .section-active .stagger-1 { animation: titleFadeInUp 0.7s ease-out 0.2s both; }
+        .section-active .stagger-2 { animation: titleFadeInUp 0.7s ease-out 0.3s both; }
+        .section-active .stagger-3 { animation: titleFadeInUp 0.7s ease-out 0.4s both; }
+        .section-active .stagger-4 { animation: titleFadeInUp 0.7s ease-out 0.5s both; }
+
+        h1.dark\:text-dark-text-primary {
+            text-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
+        }
+
+        h1.text-light-text-primary {
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .emblem-container img { animation: float 6s ease-in-out infinite; }
+        
+        .btn-primary { 
+            position: relative; 
+            overflow: hidden; 
+            background: linear-gradient(to right, #1e293b, #0f172a);
+            border: 1px solid #334155; 
+            color: #e2e8f0; 
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
+        }
+        .btn-primary .shine {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: all 0.6s ease;
+        }
+        .btn-primary:hover .shine {
+            left: 100%;
+        }
+
+        html.light .btn-primary { 
+            background: linear-gradient(to right, #ffffff, #f0f7ff); 
+            border-color: #dbeafe; 
+            color: var(--light-text-primary); 
+            box-shadow: 0 4px 15px rgba(29, 78, 216, 0.05); 
+        }
+        .btn-primary:hover:not(:disabled) { 
+            transform: translateY(-4px) scale(1.03); 
+            box-shadow: 0 10px 25px -5px var(--brand-glow), 0 8px 10px -6px var(--brand-glow);
+        }
+        html.light .btn-primary:hover:not(:disabled) { 
+            box-shadow: 0 10px 25px rgba(29, 78, 216, 0.2); 
+            color: #1d4ed8; 
+        }
+        .btn-primary:disabled {
+            background: #374151;
+        }
+        html.light .btn-primary:disabled {
+            background: #e5e7eb;
+        }
+
+
+        .sun-icon, .moon-icon {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+            position: absolute;
+            inset: 0;
+        }
+        .sun-icon { transform: scale(0) rotate(90deg); opacity: 0; }
+        .moon-icon { transform: scale(1) rotate(0deg); opacity: 1; }
+        html.dark .sun-icon { transform: scale(1) rotate(0deg); opacity: 1; }
+        html.dark .moon-icon { transform: scale(0) rotate(-90deg); opacity: 0; }
+
+        /* --- MODAL REFINEMENT STYLES START --- */
+        .prose, html.light .prose {
+            line-height: 1.75;
+        }
+
+        .topic-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s;
+        }
+        .topic-number-container {
+            flex-shrink: 0;
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 50%;
+            border: 2px solid var(--dark-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        html.light .topic-number-container {
+            border-color: var(--light-border);
+        }
+
+        .topic-item.active .topic-number-container {
+            border-color: var(--brand-blue);
+            background-color: var(--brand-blue);
+            color: white;
+            box-shadow: 0 0 10px var(--brand-glow);
+        }
+        .topic-item.completed .topic-number-container {
+            border-color: var(--brand-blue);
+            background-color: var(--brand-blue);
+        }
+        .topic-item.completed .topic-number {
+            display: none;
+        }
+        .topic-item.completed .topic-check-icon {
+            display: block;
+            color: white;
+            stroke-width: 3;
+        }
+       
+        #apostila-modal .topic-item:hover:not(.active) {
+            background-color: rgba(128, 128, 128, 0.05);
+        }
+        html.light #apostila-modal .topic-item:hover:not(.active) {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+      
+        #apostila-modal .topic-item.active { 
+            font-weight: 600;
+            color: var(--dark-text-primary);
+        }
+        html.light #apostila-modal .topic-item.active { 
+            color: var(--light-text-primary);
+        }
+
+        #apostila-content > div { 
+            animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); 
+        }
+        .prose strong, .prose a {
+            color: #60a5fa;
+        }
+        html.light .prose strong, html.light .prose a {
+            color: #1d4ed8;
+        }
+        
+        #progress-bar {
+            transition: height 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            background: linear-gradient(to top, #2563eb, #60a5fa);
+            box-shadow: 0 0 8px rgba(37, 99, 235, 0.5);
+        }
+       
+        .completion-check {
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            animation: draw-check 0.5s 0.3s ease-out forwards;
+        }
+        .gallery-nav-btn {
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+            transition: all 0.2s ease;
+        }
+        .gallery-nav-btn:hover:not(:disabled) {
+             background: rgba(0,0,0,0.6);
+             transform: scale(1.1);
+        }
+        /* --- MODAL REFINEMENT STYLES END --- */
+    </style>
+</head>
+<body class="bg-light-bg dark:bg-dark-bg text-light-text-secondary dark:text-dark-text-secondary transition-colors duration-500">
+
+    <div id="preloader">
+        <div class="loader-container">
+            <img src="https://i.imgur.com/j0Wl6DQ.png" class="loader-emblem" alt="Loading Emblem">
+        </div>
+        <p id="loader-text" class="text-lg mt-6 tracking-wider text-light-text-secondary dark:text-dark-text-secondary font-medium"></p>
+        <div id="loader-bar-container" class="w-48 h-2 bg-dark-border rounded-full mt-6 overflow-hidden">
+            <div id="loader-bar" class="h-full bg-brand-blue rounded-full" style="width: 0%; transition: width 0.8s ease-in-out;"></div>
+        </div>
+    </div>
+    
+    <div id="sky-background">
+        <div id="stars"></div>
+        <div class="aurora-container">
+            <div class="aurora aurora-1"></div>
+            <div class="aurora aurora-2"></div>
+        </div>
+        <div id="clouds">
+            <div class="cloud cloud-1"></div>
+            <div class="cloud cloud-2"></div>
+        </div>
+        <div id="celestial-container">
+            <div id="sun"></div>
+            <div id="moon"></div>
+        </div>
+    </div>
+
+    <header class="fixed top-0 left-0 right-0 w-full z-[60] flex justify-center pt-5">
+        <nav id="header-nav" class="hidden md:block">
+            <div id="navbar" class="relative bg-light-card/60 dark:bg-dark-card/60 backdrop-blur-lg border border-light-border dark:border-dark-border rounded-full p-2 shadow-lg">
+                <ul id="nav-list" class="relative flex items-center gap-1">
+                    <div id="nav-active-bg" class="absolute top-0 left-0 h-full rounded-full z-0"></div>
+                    <li><a href="#cfsd" class="nav-link active font-medium text-base px-5 py-2 block">CFSd</a></li>
+                    <li><a href="#cfcb" class="nav-link font-medium text-base px-5 py-2 block">CFCb</a></li>
+                    <li><a href="#cfsgt" class="nav-link font-medium text-base px-5 py-2 block">CFSgt</a></li>
+                    <li><a href="#cfsbt" class="nav-link font-medium text-base px-5 py-2 block">CFSbt</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <button id="mobile-menu-button" class="md:hidden fixed top-4 right-4 z-[90] p-2.5 rounded-full bg-light-card/60 dark:bg-dark-card/60 backdrop-blur-md border border-light-border dark:border-dark-border">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+    </button>
+    
+    <div id="mobile-menu" class="md:hidden fixed inset-y-0 left-0 w-72 bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-xl border-r border-light-border dark:border-dark-border shadow-2xl transform -translate-x-full transition-transform duration-500 ease-in-out z-[100]">
+        <div class="flex justify-between items-center p-5 border-b border-light-border dark:border-dark-border">
+            <h2 class="font-bold text-lg text-light-text-primary dark:text-dark-text-primary">Navegação</h2>
+            <button id="close-mobile-menu">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <nav class="p-5">
+            <ul class="flex flex-col space-y-2">
+                <li><a href="#cfsd" class="mobile-nav-link block text-lg font-semibold p-4 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-all duration-300">CFSd</a></li>
+                <li><a href="#cfcb" class="mobile-nav-link block text-lg font-semibold p-4 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-all duration-300">CFCb</a></li>
+                <li><a href="#cfsgt" class="mobile-nav-link block text-lg font-semibold p-4 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-all duration-300">CFSgt</a></li>
+                <li><a href="#cfsbt" class="mobile-nav-link block text-lg font-semibold p-4 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-all duration-300">CFSbt</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div id="menu-overlay" class="md:hidden hidden fixed inset-0 bg-black/60 z-[99] transition-opacity duration-500"></div>
+
+    <main>
+        <section id="cfsd" class="section-container section-active">
+            <div class="max-w-7xl w-full mx-auto grid md:grid-cols-2 items-center gap-12">
+                <div class="text-center md:text-left">
+                    <p class="text-brand-blue font-semibold tracking-wide uppercase stagger-1">CFSd</p>
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tighter text-light-text-primary dark:text-dark-text-primary mt-2 stagger-2">Curso de Formação de Soldado/Policial</h1>
+                    <p class="mt-4 text-base md:text-lg max-w-xl mx-auto md:mx-0 stagger-3">Destinado a soldado/policial+</p>
+                    <div class="mt-8 stagger-4">
+                        <button data-course="soldado" class="open-modal-btn btn-primary inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full font-semibold text-lg">
+                            <span class="shine"></span>
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19.5A2.5 2.5 0 016.5 17H20"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"></path></svg>
+                            <span>Acessar</span>
+                        </button>
+                    </div>
+                </div>
+                 <div class="emblem-container flex justify-center stagger-3">
+                    <img src="https://i.imgur.com/j0Wl6DQ.png" alt="Ilustração do curso" class="relative z-10 w-64 h-auto sm:w-80">
+                </div>
+            </div>
+        </section>
+
+        <section id="cfcb" class="section-container section-inactive">
+             <div class="max-w-7xl w-full mx-auto grid md:grid-cols-2 items-center gap-12">
+                 <div class="text-center md:text-left">
+                    <p class="text-brand-blue font-semibold tracking-wide uppercase stagger-1">CFCb</p>
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tighter text-light-text-primary dark:text-dark-text-primary mt-2 stagger-2">Curso de Formação de Cabo/Escrivão</h1>
+                    <p class="mt-4 text-base md:text-lg max-w-xl mx-auto md:mx-0 stagger-3">Destinado a cabo/escrivão+</p>
+                    <div class="mt-8 stagger-4">
+                        <button data-course="cabo" class="open-modal-btn btn-primary inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full font-semibold text-lg">
+                             <span class="shine"></span>
+                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19.5A2.5 2.5 0 016.5 17H20"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"></path></svg>
+                            <span>Acessar</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="emblem-container flex justify-center stagger-3">
+                    <img src="https://i.imgur.com/j0Wl6DQ.png" alt="Ilustração do curso" class="relative z-10 w-64 h-auto sm:w-80">
+                </div>
+            </div>
+        </section>
+        <section id="cfsgt" class="section-container section-inactive">
+             <div class="max-w-7xl w-full mx-auto grid md:grid-cols-2 items-center gap-12">
+                 <div class="text-center md:text-left">
+                    <p class="text-brand-blue font-semibold tracking-wide uppercase stagger-1">CFSgt</p>
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tighter text-light-text-primary dark:text-dark-text-primary mt-2 stagger-2">Curso de Formação de Sargento/Delegado</h1>
+                     <p class="mt-4 text-base md:text-lg max-w-xl mx-auto md:mx-0 stagger-3">Destinado a sargento/delegado+</p>
+                    <div class="mt-8 stagger-4">
+                        <button data-course="sargento" class="open-modal-btn btn-primary inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full font-semibold text-lg">
+                             <span class="shine"></span>
+                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19.5A2.5 2.5 0 016.5 17H20"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"></path></svg>
+                            <span>Acessar</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="emblem-container flex justify-center stagger-3">
+                    <img src="https://i.imgur.com/j0Wl6DQ.png" alt="Ilustração do curso" class="relative z-10 w-64 h-auto sm:w-80">
+                </div>
+            </div>
+        </section>
+        <section id="cfsbt" class="section-container section-inactive">
+              <div class="max-w-7xl w-full mx-auto grid md:grid-cols-2 items-center gap-12">
+                 <div class="text-center md:text-left">
+                    <p class="text-brand-blue font-semibold tracking-wide uppercase stagger-1">CFSbt</p>
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tighter text-light-text-primary dark:text-dark-text-primary mt-2 stagger-2">Curso de Formação de Subtenente/Delegado</h1>
+                     <p class="mt-4 text-base md:text-lg max-w-xl mx-auto md:mx-0 stagger-3">Destinado a subtenente/delegado+</p>
+                    <div class="mt-8 stagger-4">
+                        <button data-course="subtenente" class="open-modal-btn btn-primary inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full font-semibold text-lg">
+                             <span class="shine"></span>
+                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19.5A2.5 2.5 0 016.5 17H20"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"></path></svg>
+                            <span>Acessar</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="emblem-container flex justify-center stagger-3">
+                    <img src="https://i.imgur.com/j0Wl6DQ.png" alt="Ilustração do curso" class="relative z-10 w-64 h-auto sm:w-80">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="fixed bottom-5 left-5 z-50">
+        <button id="theme-toggle" aria-label="Mudar tema" class="w-12 h-12 flex items-center justify-center rounded-full bg-light-card/60 dark:bg-dark-card/60 backdrop-blur-md border border-light-border dark:border-dark-border shadow-md transition-transform hover:scale-110">
+        </button>
+    </div>
+    
+    <div id="credits" class="fixed bottom-5 right-5 z-50 text-xs text-gray-500 dark:text-gray-400 opacity-0 animate-fade-in" style="animation-delay: 2.2s;">
+        Desenvolvido por <a href="https://feb.syshabbo.com/perfil/.Brendon" class="font-semibold text-brand-blue hover:underline">.Brendon</a>
+    </div>
+
+    <!-- MODAL REFINED -->
+    <div id="apostila-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-[110] flex items-center justify-center p-4">
+        <div id="modal-content-wrapper" class="w-11/12 max-w-6xl h-[90vh] bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-2xl shadow-2xl flex flex-col md:flex-row animate-modal-in overflow-hidden relative">
+            <!-- Course View -->
+            <div id="course-view" class="flex flex-col md:flex-row w-full h-full">
+                <!-- Sidebar -->
+                <div class="hidden md:flex flex-col w-full md:w-1/3 border-b md:border-b-0 md:border-r border-light-border dark:border-dark-border flex-shrink-0">
+                    <div class="p-5 border-b border-light-border dark:border-dark-border flex-shrink-0 flex justify-between items-center">
+                        <div>
+                            <h3 id="course-title" class="text-lg font-bold text-light-text-primary dark:text-dark-text-primary"></h3>
+                            <p id="modal-progress-text" class="text-sm text-light-text-secondary dark:text-dark-text-secondary"></p>
+                        </div>
+                    </div>
+                    <div class="relative p-4 overflow-y-auto md:flex-grow">
+                        <div class="absolute top-0 left-4 w-1 h-full hidden md:block">
+                            <div id="progress-bar-container" class="relative w-full h-full bg-light-border dark:bg-dark-border rounded-full">
+                                <div id="progress-bar" class="w-full rounded-full" style="height: 0%;"></div>
+                            </div>
+                        </div>
+                        <nav id="apostila-topics" class="relative z-10 space-y-2"></nav>
+                    </div>
+                </div>
+                <!-- Mobile/Main Content -->
+                <div class="flex-grow flex flex-col relative w-full overflow-y-auto">
+                     <div class="p-5 border-b border-light-border dark:border-dark-border flex-shrink-0 flex justify-between items-center md:hidden">
+                        <div>
+                            <h3 id="mobile-course-title" class="text-lg font-bold text-light-text-primary dark:text-dark-text-primary"></h3>
+                            <p id="mobile-modal-progress-text" class="text-sm text-light-text-secondary dark:text-dark-text-secondary"></p>
+                        </div>
+                    </div>
+                     <div id="mobile-progress-bar-container" class="w-full px-6 pt-4 sticky top-0 bg-light-card dark:bg-dark-card z-10 md:hidden">
+                        <div class="h-2 bg-light-border dark:bg-dark-border rounded-full">
+                            <div id="mobile-progress-bar" class="h-2 bg-brand-blue rounded-full" style="width: 0%; transition: width 0.5s ease;"></div>
+                        </div>
+                    </div>
+                    <div id="apostila-content" class="p-6 md:p-10 flex-grow"></div>
+                    <!-- Navigation -->
+                    <div id="topic-nav-buttons" class="flex-shrink-0 p-4 border-t border-light-border dark:border-dark-border flex justify-between items-center sticky bottom-0 bg-light-card dark:bg-dark-card">
+                         <button id="prev-topic-btn" class="btn-primary flex items-center gap-2 px-6 py-2 rounded-full font-semibold text-sm">
+                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                            <span>Anterior</span>
+                        </button>
+                         <button id="next-topic-btn" class="btn-primary flex items-center gap-2 px-6 py-2 rounded-full font-semibold text-sm">
+                            <span>Próximo</span>
+                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Completion View -->
+            <div id="completion-view" class="hidden flex flex-col items-center justify-center w-full h-full p-8 text-center">
+                <div class="flex flex-col items-center justify-center flex-grow animate-fade-in-up">
+                    <img src="https://i.imgur.com/j0Wl6DQ.png" alt="Emblema de Conclusão" class="w-32 h-32 mb-4 animate-float">
+                    <h2 class="text-3xl font-bold text-light-text-primary dark:text-dark-text-primary">Parabéns!</h2>
+                    <p class="mt-2 text-lg max-w-md mx-auto">Agora que você finalizou a leitura, procure um(a) <strong>instrutor(a)</strong> da <strong>Escola de Graduação Militar (EsGM)</strong> para realizar o exame teórico e dar o próximo passo na sua formação.</p>
+                </div>
+                <div class="flex items-center gap-4 mt-8 animate-fade-in-up" style="animation-delay: 0.2s;">
+                     <button id="restart-course-btn" class="bg-light-card/60 dark:bg-dark-card/60 backdrop-blur-md border border-light-border dark:border-dark-border text-light-text-primary dark:text-dark-text-primary px-6 py-3 rounded-full font-semibold hover:border-brand-blue hover:text-brand-blue dark:hover:border-brand-blue dark:hover:text-brand-blue transition-all">
+                        Recomeçar
+                    </button>
+                    <button id="close-completion-btn" class="btn-primary px-8 py-3 rounded-full font-semibold">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+            <button id="close-modal" class="absolute top-4 right-4 text-gray-500 hover:text-light-text-primary dark:hover:text-dark-text-primary transition-colors z-20"><svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+        </div>
+        
+        <!-- Close Confirmation Modal -->
+        <div id="close-confirmation-modal" class="hidden fixed inset-0 bg-black/60 z-[120] flex items-center justify-center p-4">
+             <div class="bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center animate-modal-in">
+                <h3 class="text-xl font-bold text-light-text-primary dark:text-dark-text-primary">Tem a certeza?</h3>
+                <p class="mt-2 text-light-text-secondary dark:text-dark-text-secondary">O seu progresso será perdido se sair agora. Deseja continuar?</p>
+                <div class="flex justify-center gap-4 mt-6">
+                    <button id="cancel-close-btn" class="bg-gray-200 dark:bg-gray-700 px-6 py-2 rounded-full font-semibold">Cancelar</button>
+                    <button id="confirm-close-btn" class="bg-red-500 text-white px-6 py-2 rounded-full font-semibold">Sair</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const preloader = document.getElementById('preloader');
+            const loaderText = document.getElementById('loader-text');
+            const loaderBar = document.getElementById('loader-bar');
+
+            if (loaderText && loaderBar) {
+                const loadingMessages = [
+                    "Verificando informações...",
+                    "Consultando sistemas...",
+                    "Alinhando planetas...",
+                    "Polindo emblemas...",
+                ];
+                let messageIndex = 0;
+                const intervalDuration = 400; 
+                const totalDuration = loadingMessages.length * intervalDuration;
+
+                loaderText.textContent = loadingMessages[0];
+                const initialProgress = (1 / loadingMessages.length) * 100;
+                loaderBar.style.width = `${initialProgress}%`;
+
+                const textInterval = setInterval(() => {
+                    messageIndex++;
+                    if (messageIndex < loadingMessages.length) {
+                        const progress = ((messageIndex + 1) / loadingMessages.length) * 100;
+                        loaderBar.style.width = `${progress}%`;
+                        
+                        loaderText.style.opacity = '0';
+                        setTimeout(() => {
+                            loaderText.textContent = loadingMessages[messageIndex];
+                            loaderText.style.opacity = '1';
+                        }, 200);
+                    } else {
+                        clearInterval(textInterval);
+                    }
+                }, intervalDuration);
+
+                setTimeout(() => {
+                    clearInterval(textInterval);
+                    preloader.classList.add('preloader-hidden');
+                    setTimeout(() => preloader.style.display = 'none', 800);
+                    initializePage();
+                }, totalDuration + 200);
+
+            } else {
+                 setTimeout(() => {
+                    preloader.classList.add('preloader-hidden');
+                    setTimeout(() => preloader.style.display = 'none', 800);
+                    initializePage();
+                }, 500);
+            }
+        });
+
+        function initializePage() {
+            const starsContainer = document.getElementById('stars');
+            
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const size = Math.random() * 2 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 4}s`;
+                star.style.animationDuration = `${Math.random() * 2 + 3}s`;
+                starsContainer.appendChild(star);
+            }
+            
+            const courseData = {
+                soldado: {
+                    title: 'Apostila de Formação de Soldado/Policial',
+                    topics: [
+                        {title: 'INTRODUÇÃO', text:'Olá, <strong>Soldado/Policial!</strong><br><br>Seja bem-vindo a este novo capítulo da sua jornada. Como <strong>Soldado/Policial</strong>, você está na linha de frente da nossa instituição. Suas responsabilidade inclue alistar novos recruras. Esta apostila é o seu primeiro passo para entender os procedimentos básicos, inicialmente, o registro no <strong>FEBSystem.</strong> <br><br>Leia com atenção e prepare-se para as novas responsabilidades.'},
+                        { title: 'PRIMEIRO PASSO', text: 'Para criar sua conta no system acesse no seu navegador: <strong><a href="http://feb.syshabbo.com" class="hover:underline" target="_blank">feb.syshabbo.com</a></strong> <br><br>Vá em <strong>REGISTRAR</strong> e preencha com todos os dados solicitados.', images: ['https://i.imgur.com/b3eGJHy.gif']},
+                        { title: 'DADOS DE REGISTRO', text: '<strong>Nickname:</strong> Seu nickname no Habbo. <br><br><strong>E-mail:</strong> Utilize um e-mail exclusivo para o system, não vinculado à sua conta pessoal ou do Habbo.<br><br><strong>Senha:</strong> Crie uma senha forte (8+ caracteres, com letras, números e símbolos). Por segurança, <strong>NÃO UTILIZE A MESMA SENHA DO HABBO.<strong>', images: ['https://i.imgur.com/9XiAqE8.png']},
+                        { title: 'VALIDAÇÃO', text: 'Após o preenchimento, copie o código de validação fornecido e cole-o em sua missão no Habbo. Feito isso, clique em registrar para concluir a criação da sua conta.', images: ['https://i.imgur.com/XIAiFJO.png', 'https://i.imgur.com/M3eYHBQ.png']}
+                    ]
+                },
+                cabo: { 
+                    title: 'Apostila de Formação de Cabo/Escrivão', 
+                    topics: [
+                        {title: 'INTRODUÇÃO', text:'Olá, <strong>Cabo/Escrivão!</strong> <br><br> Seja bem-vindo à apostila do <strong>Curso de Formação de Cabos e Escrivães</strong>, desenvolvida pela <strong>Escola de Graduação Militar (EsGM)</strong>. Este material foi cuidadosamente elaborado para fornecer a você a base teórica e prática necessária para exercer suas futuras funções como cabo e escrivão com excelência e segurança. <br><br> Portanto, dedique-se à leitura, absorva o conteúdo e prepare-se para aplicar os conteúdos repassados na prática. Após a leitura, você poderá solicitar a aplicação do exame teórico, que testará tudo o que você aprendeu.', images:['https://i.imgur.com/Yps1sFC.png']},
+                        {title: 'FUNÇÕES DO BATALHÃO', text:'O batalhão possui um total de seis funções, cada uma com suas responsabilidades específicas, sendo: <br><br> <strong>Oficial da Guarda:</strong> responsável por administrar todo batalhão e suas funções; controlar o fluxo de entrada e saída de policiais nas mais diversas funções; destinar o sentido a maior patente/cargo hierárquica presente em base, assim como garantir a segurança física, ética e moral das dependências da FEB. Obrigatoriamente, utiliza o balão de fala na cor amarelo. <br><br><strong>Cabo da Guarda:</strong> responsável por administrar a recepção, assim como o fluxo de entrada e saída de policiais. Obrigatoriamente, utiliza o balão de fala na cor vermelha. <br><br> <strong>Auxiliar Operacional:</strong> responsável por comandar a sala operacional, bem como seus operadores, com o objetivo de garantir o bom exercício em função, seja na conferência e na celeridade. Obrigatoriamente, utiliza o balão de fala na cor cinza. <br><br> <strong>Operadores:</strong> responsáveis pela conferência e liberação dos militares.<br><br><strong>Sentinela:</strong>  responsável por aplicar a pré-aula aos recrutas, transmitindo conhecimentos fundamentais para a formação, como história, comandos, etc. <br><br><strong>Recepção:</strong> responsável por alistar novos/futuros policiais e orientar sobre os primeiros passos na instituição. <br><br>Como cabo/escrivão, você estará apto a assumir novas funções, como: <strong>operadores e sentinela.</strong>'},
+                        {title: 'SUBFUNÇÕES DO BATALHÃO', text:'O batalhão possui um total de duas subfunções, cada uma com suas responsabilidades específicas, sendo:<br><br><strong>Oficial de Comando:</strong> responsável por auxiliar o Oficial da Guarda em suas tarefas, garantindo que a ordem e a segurança sejam mantidas, e sua atuação é permitida a qualquer momento. Em situações de emergência, como ataques de classe três ou superior, devendo assumir imediatamente o posto do Oficial da Guarda. Para atuar como Oficial de Comando, é necessário ser Suboficial/Delegado+ e ter concluído o Curso de Formação de Oficiais (CFO) ou ser portador de direitos no batalhão. O assento ao lado do palanque do Oficial da Guarda é de uso exclusivo do militar que está atuando como Oficial de Comando.<br><br><strong>Sala de Atendimento:</strong> é uma subfunção para a resolução de questões e o suporte aos policiais. Para exercê-la, é necessário que o militar seja, no mínimo, Suboficial/Delegado+ com CFO e esteja atendendo um par ou um subalterno.'},
+                        {title: 'SALA OPERACIONAL', text:'A Sala Operacional é a porta de entrada para todos os militares com patentes abaixo de Suboficial/Delegado. É um setor de extrema importância, pois é onde a primeira verificação dos militares é realizada, garantindo que todos estejam seguindo os padrões estipulados na <strong>Constituição Militar e no Anexo III - Política de Identificação e Normas.</strong>', images:['https://i.imgur.com/D6Up6fL.png']},
+                        {title: 'OPERADOR 1', text: '<strong>Operadores: funções e comandos</strong> <br><br>A função de operador se divide em três modalidades, sendo: <br><br><strong>• Operador 1:</strong> nesta função, deverá conferir os requisitos básicos conforme a patente/cargo. Por isso, siga os seguinte passos:<br><br> <strong>1. Fardamento:</strong> verifique se o uniforme do militar está correto e completo.<br><strong>2. Missão:</strong> cheque se a missão dele corresponde à sua patente ou cargo.<br><strong>3. Grupo:</strong> confirme que o militar tem o grupo da Polícia FEB favoritado e que não faz parte de grupos de outras instituições.<br><strong>4. Perfil:</strong> verifique se o perfil do militar está com o status e visibilidade ativo.<br><br><strong>Importante:</strong> todos esses requisitos — fardamento, missão e grupos — devem estar de acordo com o <strong>Anexo III - Política de Identificação e Normas.</strong> <br><br><strong>Comando:</strong> após a verificação completa, utilize o comando <strong>:p1</strong> para liberar o militar. Agora, caso exista um policial obstruindo o acesso, use o comando <strong>:desviar</strong> para tirá-lo.', images:['https://i.imgur.com/3UmU0wf.png']},
+                        {title: 'OPERADOR 2', text: '<strong>• Operador 2:</strong> nesta função, deverá conferir requisitos específicos. Por isso, siga os seguinte passos:<br><br><strong>Balão de fala:</strong> deve ser sempre na cor branca.<br><strong>Costas:</strong> certifique-se de que o militar não está usando nenhum item visual nas costas que não faça parte do fardamento padrão.<br><strong>System:</strong> use o FEBSystem para conferir a TAG e os cursos do militar. Afim de verificar se ele é ativo ou não, e se consta ou não no sistema.<br><br><strong>Observação:</strong> para evitar erros ao verificar o militar no System, é altamente recomendado copiar o nickname dele usando o comando <strong>"Sussurrar"</strong>.<br><br><strong>Comando:</strong> após concluir todas as verificações e ter certeza de que o militar atende a todos os requisitos, use o comando <strong>:p2</strong> para liberá-lo. <br><br>Permitir a entrada de exonerados ou não constantes no FEBSystem resultará em <strong>50 medalhas efetivas negativas</strong> por <strong>Abandono de Dever/Negligência</strong>, para você e o Auxiliar Operacional.', images:['https://i.imgur.com/XPn81Me.png']},
+                        {title: 'OPERADOR 3', text: '<strong>• Operador 3:</strong> nesta função, deverá conferir todos os requisitos do recruta. Por isso, siga os seguinte passos:<br><br><strong>Requisitos básicos:</strong> deve conferir se o militar atende a todos os padrões de identificação e normas. Para isso, verifique o fardamento, missão, grupos, balão de fala e status e visibilidade do perfil.<br><strong>System:</strong> além da conferência visual, deve conferir o perfil do militar no System. Sua tarefa é confirmar se o recruta não consta ou se foi exonerado.<br><br><strong>Comando:</strong> após a verificação completa e a certeza de que o militar está apto, use o comando <strong>:p3</strong> para liberá-lo. Agora, caso queira expulsar, use o comando <strong>:pk3</strong> no assento.<br><br>Permitir a entrada de exonerados ou policiais ativos no FEBSystem resultará em <strong>50 medalhas efetivas negativas</strong> por <strong>Abandono de Dever/Negligência</strong>, para você e o Auxiliar Operacional.', images:['https://i.imgur.com/9hUexVo.png']},
+                        {title: 'SEGURANÇA NA CONFERÊNCIA', text: 'A função de operador exige total <strong>atenção aos detalhes</strong> e o cumprimento de protocolos de segurança específicos para evitar a entrada de fakes ou usuários mal-intencionados. <br><br><strong>Copie o nickname pelo sussurro</strong>: sempre utilize a função de sussurro para copiar o nickname do militar que será verificado. <br><br><strong>Cheque o estado do perfil:</strong> verifique se o perfil do militar está "online". <br><br><strong>Confira todos os grupos:</strong> cheque todos os grupos a que o militar pertence, independentemente de quantos sejam. Verifique se os nomes dos grupos e seus donos estão de acordo com o <strong>Anexo III - Política de Identificação e Normas.</strong>'},
+                        {title: 'SENTINELA', text: 'A sentinela é a função responsável por <strong>aplicar a pré-aula</strong> para aos recrutas. A instrução é repassada de forma orgânica, sem o uso de scripts. O sentinela deve, portanto, utiliza a cor cinza em seu balão de fala.<br><br><strong>Comandos no batalhão auxiliar:</strong><br><br><strong>:iniciartempo</strong> - para iniciar o tempo de pré-aula.<br><strong>:corredor</strong> - dirigir-se ao corredor da EsGM.<br><strong>:sala1</strong> e <strong>:sala2</strong> - dirigir-se até as salas de CFI.<br><br><strong>Comandos no batalhão principal:</strong><br><strong>:sen</strong> - para encaminhar o recruta ao corredor da EsGM.', images:['https://i.imgur.com/8F9Rsw6.png']},
+                        {title: 'SEGURANÇA PESSOAL', text: 'Sua segurança e a da instituição estão diretamente ligadas. A seguir, apresentamos algumas regras essenciais para garantir que sua conta e a FEB permaneçam seguras. O não cumprimento dessas regras pode levar a punições conforme o <strong>Código Penal Militar.</strong> <br><br>• <strong>Não compartilhar seus dados, mesmo com amigos próximos ou parentes;</strong> <br>• <strong>Não armazenar suas senhas em locais online ou em blocos de notas;</strong> <br>• <strong>Não acessar sites suspeitos ou estranhos, especialmente os que prometem fornecer “moedas”;</strong> <br>• <strong>Jamais compartilhar sua conta com terceiros, sejam amigos ou parentes;</strong> <br>• <strong>Seguir as regras da Habbo Etiqueta;</strong> <br>• <strong>Seguir as regras e documentações da instituição.</strong><br><br><strong>Observação:</strong> caso perca o acesso à sua conta ou suspeite que ela foi invadida, comunique imediatamente a um membro do <strong>Setor de Inteligência da FEB.</strong>'}
+                    ] 
+                },
+                sargento: { 
+                    title: 'Apostila de Formação de Sargento/Delegado', 
+                    topics: [
+                        {title: 'INTRODUÇÃO', text:'Olá, <strong>Sargento/Delegado!</strong> <br><br> Seja bem-vindo à apostila do <strong>Curso de Formação de Sargentos e Delegados</strong>, desenvolvida pela <strong>Escola de Graduação Militar (EsGM)</strong>. Este material foi cuidadosamente elaborado para fornecer a você a base teórica e prática necessária para exercer suas futuras funções como sargento e delegado com excelência e segurança. <br><br> Portanto, dedique-se à leitura, absorva o conteúdo e prepare-se para aplicar os conteúdos repassados na prática. Após a leitura, você poderá solicitar a aplicação do exame teórico, que testará tudo o que você aprendeu.', images:['https://i.imgur.com/Yps1sFC.png']},
+                        {title: 'FUNÇÕES DE COMANDO', text:'No Curso de Formação de Cabo/Escrivão, você se aprofundou nas funções de operador e sentinela. Agora, vamos focar nas <strong>Funções de Comando</strong>, que são essenciais para a organização e comando do batalhão. <br><br>A seguir, apresentamos as funções de comando que você poderá assumir em sua nova patente.', images:['https://i.imgur.com/Yps1sFC.png']},
+                        {title: 'OFICIAL DA GUARDA', text: 'O <strong>Oficial da Guarda (OG)</strong> é o principal responsável por coordenar todos os setores do batalhão. Ele garante que as atividades e funções operem sem problemas. <br><br><strong>Responsabilidades:</strong> coordenar todas as funções, garantir o pleno funcionamento do batalhão e aplicar o comando <strong>Sentido</strong> sempre que houver a entrada do superior hierárquico de maior patente presente. Na entrada de Chefes de Estado, aplicar obrigatoriamente os comandos <strong>Sentido e Continência.</strong> <br><br><strong>Identificação:</strong> o <strong>OG</strong> é facilmente identificado pelo <strong>balão de fala amarelo</strong>. <br><br><strong>Requisitos:</strong> para assumir essa função, é necessário ter concluído o <strong>Curso de Formação de Oficiais</strong> e/ou ser <strong>portador de direitos</strong> no batalhão. <br><br><strong>Comandos:</strong> em casos que houver um número excessivo de civis/militares no saguão, use o comando <strong>limparsaguao</strong> para limpar a área.<br><br><strong>Observação:</strong> na ausência do Cabo da Guarda, ou caso este esteja impossibilitado de aplicar o comando Sentido à recepção, a responsabilidade caberá, <strong>obrigatoriamente</strong>, ao <strong>Oficial da Guarda</strong>. <br><br>Ao assumir o posto de Oficial da Guarda, é de extrema importância que o militar esteja ciente e tenha realizado a leitura integral do <strong>Plano de Controle Emergencial</strong>, a fim de garantir a segurança física, moral e ética do batalhão.', images:['https://i.imgur.com/kIRv6ZU.png']},
+                        {title: 'OFICIAL DE COMANDO', text:'O <strong>Oficial de Comando (OC)</strong> não é uma função independente, mas sim uma subfunção de apoio/auxílio ao <strong>Oficial da Guarda (OG).</strong> Sua função é fundamental para assegurar o contingente do batalhão. Apenas militares que cumprem os requisitos necessários podem ser designados para essa responsabilidade. <br><br>O auxílio ao <strong>Oficial da Guarda</strong> é uma responsabilidade séria e exige disciplina e atenção. Para garantir a segurança e a ordem, o <strong>Oficial de Comando</strong> deve seguir estas diretrizes:<br><br><strong>Responsabilidades:</strong> auxiliar o Oficial da Guarda em suas tarefas, garantindo que a ordem e a segurança sejam mantidas.<br><br><strong>Horário de auxílio:</strong> a atuação do OC é permitida a qualquer momento, sem restrição de horário.<br><br><strong>Ataques de alta classe:</strong> em situações de emergência, como ataques de classe três ou superior, o Oficial de Comando deve assumir imediatamente o posto do Oficial da Guarda.<br><br><strong>Requisitos:</strong> para atuar como Oficial de Comando, é necessário ser <strong>Suboficial/Promotor+</strong> e ter concluído o <strong>Curso de Formação de Oficiais (CFO)</strong> e <strong>ser portador de direitos no batalhão</strong>.<br><br><strong>Comandos:</strong> em casos que houver um número excessivo de civis/militares no saguão, use o comando <strong>limparsaguao</strong> para limpar a área.<br><br><strong>Observação:</strong> o assento ao lado do palanque do Oficial da Guarda é de uso exclusivo do militar que está atuando como Oficial de Comando.'},
+                        {title: 'CABO DA GUARDA', text: 'O <strong>Cabo da Guarda (CG)</strong> gerencia a recepção e os alistamentos. Seu objetivo é garantir o bom exercício dos recepcionistas, a triagem correta dos alistados e a organização da recepção. O <strong>CG</strong> também é responsável por treinar os recepcionistas e aplicar o comando <strong>Sentido</strong> para a recepção após a ordem do Oficial da Guarda.<br><br><strong>Identificação:</strong> o <strong>balão de fala vermelho</strong> identifica o <strong>CG</strong>.<br><br><strong>Comandos:</strong><br><br><strong>visu1 a visu4:</strong> colocam automaticamente o fardamento em um civil nas cadeiras de alistamento (da esquerda para a direita).<br><br><strong>kike1 a kike4:</strong> teleportam civis de volta para os sofás do saguão, para evitar baderna (da esquerda para a direita). <br><br><strong>Atenção:</strong> todos esses comandos só funcionam se acionados <strong>em cima do palanque</strong>, que fica no centro do batalhão, ao lado do <strong>OG</strong>.<br><br>Ao assumir o posto de Cabo da Guarda, é essencial que o militar esteja plenamente ciente das disposições previstas no <strong>Anexo III – Política de Identificação e Normas.</strong>', images:['https://i.imgur.com/S5r4kM6.png']},
+                        {title: 'AUXILIAR OPERACIONAL', text: 'O <strong>Auxiliar Operacional (AO)</strong> é responsável pela administração da Sala Operacional, competindo-lhe gerir, repor e alternar os operadores, assegurando a eficiência e o pleno desempenho das funções atribuídas, seja no âmbito do suporte, da supervisão ou da correção. <br><br><strong>Comandos específicos:</strong> o AO utiliza o comando <strong>:porta</strong> para abrir e fechar a porta da sala operacional. Em casos que houver um civil/policial obstruindo a passagem de acesso, use o comando <strong>:desviar</strong> para tirá-lo da frente da porta ou <strong>:pk</strong> para removê-lo dos pisos. Esses comandos devem ser acionados na cadeira/palanque onde o Auxiliar Operacional se localiza. <br><br><strong>Como Sargento</strong>, você poderá assumir as funções de <strong>Cabo da Guarda</strong> e <strong>Auxiliar Operacional</strong> após a conclusão deste curso. Se você for portador de direitos, em alguns casos, também poderá assumir a função de Oficial da Guarda. <br><br>Ao assumir o posto de Auxiliar Operacional, é essencial que o militar esteja plenamente ciente das disposições previstas no <strong>Anexo III – Política de Identificação e Normas.</strong><br><br>O Auxiliar Operacional que <strong>deixar de realizar a conferência rigorosa</strong> do Operador 2, permitindo a entrada de policial não constante ou exonerado, ou do Operador 3, permitindo a entrada de exonerado ou policial ativo de forma indevida, <strong>você e o respectivo operador incorrerão no crime de Abandono de Dever/Negligência</strong>, ficando sujeitos à penalidade de <strong>50 medalhas efetivas negativas.</strong>' , images:['https://i.imgur.com/t2zPma4.png']},
+                        {title: 'PILARES DA LIDERANÇA', text: 'Ao desempenhar as funções - especialmente as de comando -, e até mesmo para se tornar um bom oficial, três características serão indispensáveis: <strong>rigidez, pulso firme e comunicação clara.</strong> <br><br>A <strong>rigidez</strong> é demonstrada na seriedade e na exigência do melhor dos seus subalternos, cobrando e corrigindo os erros.<br><br>O <strong>pulso firme</strong> é demonstrado por meio da segurança em suas palavras e ações.<br><br>Já a <strong>comunicação</strong> é basicamente transmitir informação, ideia, pensamento ou emoção da forma mais clara e objetiva possível, especialmente entre líderes, subalternos, pares e superiores.<br><br> Uma conduta essencial é evitar a <strong>rudez ou descortesia</strong>; seja claro, atencioso e cauteloso ao decidir e orientar, sejam eles seus subalternos, pares e superiores.'},
+                ] },
+                subtenente: { title: 'Apostila de Formação de Subtenente/Advogado', 
+                topics: [
+                    {title:'INTRODUÇÃO', text:'Olá, <strong>Subtenente/Delegado!</strong><br><br>Seja bem-vindo a um novo patamar de sua jornada. Como Subtenente, suas responsabilidades se expandem para o comando e a gestão, e esta apostila é seu guia para essa transição. Aqui, você irá aprofundar seu conhecimento sobre os documentos essenciais da FEB e, principalmente, sobre a sua nova atribuição: o processo de <strong>promoção.</strong><br><br>Leia com atenção e prepare-se para as novas responsabilidades.'},
+                    {title:'DOCUMENTOS ESSENCIAIS', text:'Para ter sucesso em sua carreira e garantir o bom exercício de suas funções, o conhecimento dos documentos abaixo é obrigatório. Eles são a base de todas as normas e regras da FEB.<br><br><strong>Constituição Militar e Anexos:</strong> este é um dos documentos mais importantes da instituição. Ele rege as generalidades da FEB, desde punições para certos atos até o funcionamento de cada setor e função nos batalhões. O documento é complementado pelo <strong>Anexo III - Política de Identificação e Normas</strong>, que se foca em políticas de vestimenta e diretrizes.<br><br><strong>Código Penal Militar (CPM) e Anexos:</strong> O <strong>CPM</strong> é o principal documento que descreve os crimes e suas respectivas penalidades. É composto por dois anexos:<br>• <strong>Anexo I - Punições:</strong> descreve cada tipo de punição aplicada na instituição.<br>• <strong>Anexo II - Exonerações:</strong> detalha os crimes que levam à exoneração do militar.<br><br>Todos esses documentos se complementam. Dedicar tempo para a leitura deles é fundamental para sua carreira.'},
+                    {title:'PROMOÇÕES', text:'Como Subtenente, você terá a liberdade de promover militares do Corpo Militar e do Corpo Empresarial, mas com algumas limitações e procedimentos obrigatórios.<br><br><strong>Requisitos e Limitações</strong><br><br><strong>Patente máxima:</strong> você só poderá promover militares até a patente de Sargento ou sua equivalência.<br><br><strong>Permissão de oficial:</strong> para qualquer promoção, você deve obter a permissão de um Oficial do Corpo Militar ou do Corpo Empresarial.<br><br><strong>Registro:</strong> após a permissão ser postada, tire uma captura de tela como medida de segurança.<br><br>Lembre-se que, além de um tempo mínimo na patente e os cursos obrigatórios, a promoção também depende do desempenho e do comprometimento do militar. Ele deve estar realizando suas funções corretamente para ser considerado apto.'},
+                    {title:'DIÁLOGO PÓS-PROMOÇÃO', text:'O <strong>Diálogo Pós-Promoção</strong> é <strong>obrigatório</strong> e deve ser realizado com cada militar que você promover. O objetivo é prepará-lo para os novos desafios da patente. Durante o DPP, você deve abordar os seguintes pontos:<br><br>• <strong>Novos desafios da patente;</strong><br>• <strong>Cursos que ele deverá realizar e a leitura das apostilas;</strong><br>• <strong>Funções que poderá assumir;</strong><br>• <strong>Reforçar as condutas e o comportamento esperados dele na nova patente.</strong>'},
+                    {title:'COMO POSTAR UMA PROMOÇÃO', text:'Para registrar a promoção no <strong>System</strong>, siga estes passos:<br><br>Acesse o <strong>System.</strong><br>Vá em <strong>"Menu".</strong><br>Selecione <strong>"Atividades".</strong><br>Escolha a opção <strong>"Promoção".</strong><br><br>Preencha o formulário usando o modelo:<br><br>• <strong>Nickname do militar + Patente/cargo.</strong><br>• <strong>Observação:</strong> inclua os motivos da promoção, as competências e a relevância do militar para a instituição.'}
+                ] }
+            };
+
+            const modal = document.getElementById('apostila-modal');
+            const modalContentWrapper = document.getElementById('modal-content-wrapper');
+            const openModalButtons = document.querySelectorAll('.open-modal-btn');
+            const closeModalBtn = document.getElementById('close-modal');
+            const closeCompletionBtn = document.getElementById('close-completion-btn');
+            const restartCourseBtn = document.getElementById('restart-course-btn');
+            const confirmationModal = document.getElementById('close-confirmation-modal');
+            const confirmCloseBtn = document.getElementById('confirm-close-btn');
+            const cancelCloseBtn = document.getElementById('cancel-close-btn');
+            const courseView = document.getElementById('course-view');
+            const completionView = document.getElementById('completion-view');
+            const courseTitleEl = document.getElementById('course-title');
+            const mobileCourseTitleEl = document.getElementById('mobile-course-title');
+            const modalProgressTextEl = document.getElementById('modal-progress-text');
+            const mobileModalProgressTextEl = document.getElementById('mobile-modal-progress-text');
+            const apostilaTopicsEl = document.getElementById('apostila-topics');
+            const apostilaContentEl = document.getElementById('apostila-content');
+            const progressBar = document.getElementById('progress-bar');
+            const mobileProgressBar = document.getElementById('mobile-progress-bar');
+            const prevTopicBtn = document.getElementById('prev-topic-btn');
+            const nextTopicBtn = document.getElementById('next-topic-btn');
+
+            let currentCourse = null;
+            let currentTopicIndex = 0;
+            let completedTopics = new Set();
+
+            function initializeImageGallery(galleryElement) {
+                const images = Array.from(galleryElement.querySelectorAll('.gallery-image'));
+                const prevBtn = galleryElement.querySelector('.prev-image');
+                const nextBtn = galleryElement.querySelector('.next-image');
+                const counter = galleryElement.querySelector('.image-counter');
+                if (images.length <= 1) {
+                    prevBtn?.parentElement.remove();
+                    return;
+                };
+                let currentImageIndex = 0;
+                function updateGallery() {
+                    images.forEach((img, index) => img.classList.toggle('hidden', index !== currentImageIndex));
+                    prevBtn.disabled = currentImageIndex === 0;
+                    nextBtn.disabled = currentImageIndex === images.length - 1;
+                    counter.textContent = `${currentImageIndex + 1} / ${images.length}`;
+                }
+                nextBtn.addEventListener('click', () => { if (currentImageIndex < images.length - 1) { currentImageIndex++; updateGallery(); } });
+                prevBtn.addEventListener('click', () => { if (currentImageIndex > 0) { currentImageIndex--; updateGallery(); } });
+                updateGallery();
+            }
+
+            const renderTopicContent = (topic) => {
+                let imagesHTML = '';
+                if (topic.images && topic.images.length > 0) {
+                    const imageTags = topic.images.map((src, imgIndex) => `<img src="${src}" alt="Imagem do tópico" class="gallery-image ${imgIndex > 0 ? 'hidden' : ''} rounded-lg shadow-md w-full h-auto object-contain max-h-64">`).join('');
+                    const controls = topic.images.length > 1 ? `
+                        <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2">
+                             <button class="prev-image gallery-nav-btn w-10 h-10 flex items-center justify-center rounded-full text-white disabled:opacity-30 disabled:cursor-not-allowed">
+                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 18l-6-6 6-6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </button>
+                             <button class="next-image gallery-nav-btn w-10 h-10 flex items-center justify-center rounded-full text-white disabled:opacity-30 disabled:cursor-not-allowed">
+                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 18l6-6-6-6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </button>
+                        </div>
+                        <div class="absolute bottom-4 left-1/2 -translate-x-1/2">
+                             <span class="image-counter px-3 py-1 rounded-full bg-gray-900/60 backdrop-blur-sm text-white text-xs font-mono tracking-wider"></span>
+                        </div>` : '';
+                    imagesHTML = `<div class="apostila-gallery relative mt-8 bg-light-bg/50 dark:bg-dark-bg/50 p-4 rounded-xl border border-light-border dark:border-dark-border"><div class="relative w-full min-h-[100px] flex items-center justify-center">${imageTags}</div>${controls}</div>`;
+                }
+                return `
+                    <div>
+                        <h4 class="text-2xl md:text-3xl font-bold text-light-text-primary dark:text-dark-text-primary">${topic.title}</h4>
+                        <hr class="my-5 border-light-border dark:border-dark-border">
+                        <div class="prose dark:prose-invert max-w-none text-light-text-secondary dark:text-dark-text-secondary">${topic.text}</div>
+                        ${imagesHTML}
+                    </div>`;
+            };
+
+            const updateModalState = (course, topicIndex) => {
+                currentTopicIndex = topicIndex;
+                completedTopics.add(topicIndex);
+                const totalTopics = course.topics.length;
+                
+                apostilaContentEl.innerHTML = renderTopicContent(course.topics[topicIndex]);
+                apostilaContentEl.querySelectorAll('.apostila-gallery').forEach(initializeImageGallery);
+                apostilaContentEl.scrollTop = 0;
+
+                apostilaTopicsEl.querySelector('.active')?.classList.remove('active');
+                const currentTopicItem = apostilaTopicsEl.querySelector(`[data-topic-index="${topicIndex}"]`);
+                if(currentTopicItem) currentTopicItem.classList.add('active');
+
+                apostilaTopicsEl.querySelectorAll('.topic-item').forEach(item => {
+                    const idx = parseInt(item.dataset.topicIndex);
+                    const isCompleted = completedTopics.has(idx);
+                    item.classList.toggle('completed', isCompleted);
+                });
+                
+                const progressPercentage = totalTopics > 1 ? (topicIndex / (totalTopics - 1)) * 100 : (totalTopics > 0 ? 100 : 0);
+                progressBar.style.height = `${progressPercentage}%`;
+                mobileProgressBar.style.width = `${progressPercentage}%`;
+
+                const progressText = `Progresso: ${completedTopics.size} de ${totalTopics}`;
+                modalProgressTextEl.textContent = progressText;
+                mobileModalProgressTextEl.textContent = progressText;
+
+                prevTopicBtn.disabled = topicIndex === 0;
+                prevTopicBtn.classList.toggle('opacity-50', prevTopicBtn.disabled);
+                
+                if (topicIndex === totalTopics - 1) {
+                    nextTopicBtn.innerHTML = `<span>Concluir</span> <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+                    const allCompleted = completedTopics.size === totalTopics;
+                    nextTopicBtn.disabled = !allCompleted;
+                    nextTopicBtn.classList.toggle('opacity-50', !allCompleted);
+                    nextTopicBtn.classList.toggle('cursor-not-allowed', !allCompleted);
+                } else {
+                     nextTopicBtn.innerHTML = `<span>Próximo</span> <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`;
+                     nextTopicBtn.disabled = false;
+                     nextTopicBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            };
+            
+            const showCompletionScreen = () => {
+                courseView.classList.add('hidden');
+                completionView.classList.remove('hidden');
+            }
+
+            const openModal = (courseKey) => {
+                currentCourse = courseData[courseKey];
+                completedTopics.clear();
+                courseView.classList.remove('hidden');
+                completionView.classList.add('hidden');
+                courseTitleEl.textContent = currentCourse.title;
+                mobileCourseTitleEl.textContent = currentCourse.title;
+
+                if (!currentCourse?.topics || currentCourse.topics.length === 0) {
+                    apostilaTopicsEl.innerHTML = '';
+                    apostilaContentEl.innerHTML = '<p class="text-center text-dark-text-secondary p-8">Conteúdo para esta apostila ainda não está disponível.</p>';
+                    document.getElementById('topic-nav-buttons').classList.add('hidden');
+                } else {
+                    document.getElementById('topic-nav-buttons').classList.remove('hidden');
+                    apostilaTopicsEl.innerHTML = currentCourse.topics.map((topic, index) => `
+                        <button class="topic-item" data-topic-index="${index}">
+                            <div class="topic-number-container">
+                                <span class="topic-number">${index + 1}</span>
+                                <svg class="topic-check-icon hidden w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <span class="topic-title">${topic.title}</span>
+                        </button>
+                    `).join('');
+                    
+                    apostilaTopicsEl.querySelectorAll('.topic-item').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            const topicIndex = parseInt(btn.dataset.topicIndex);
+                            updateModalState(currentCourse, topicIndex);
+                        });
+                    });
+                    updateModalState(currentCourse, 0);
+                }
+                
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            };
+            
+            const performClose = () => {
+                modalContentWrapper.style.animation = 'modalIn 0.5s ease-out reverse forwards';
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    confirmationModal.classList.add('hidden');
+                    document.body.style.overflow = '';
+                    modalContentWrapper.style.animation = '';
+                }, 500);
+            }
+            
+            const closeModal = () => {
+                const courseCompleted = currentCourse && completedTopics.size === currentCourse.topics.length;
+                if(courseCompleted || !currentCourse || currentCourse.topics.length === 0){
+                    performClose();
+                } else {
+                    confirmationModal.classList.remove('hidden');
+                }
+            };
+            
+            openModalButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    if (button.disabled) return;
+                    const courseKey = button.getAttribute('data-course');
+                    openModal(courseKey);
+                });
+            });
+            
+            closeModalBtn.addEventListener('click', closeModal);
+            closeCompletionBtn.addEventListener('click', performClose);
+            restartCourseBtn.addEventListener('click', () => {
+                openModal(Object.keys(courseData).find(key => courseData[key] === currentCourse));
+            });
+            
+            confirmCloseBtn.addEventListener('click', performClose);
+            cancelCloseBtn.addEventListener('click', () => confirmationModal.classList.add('hidden'));
+
+            prevTopicBtn.addEventListener('click', () => {
+                if(currentTopicIndex > 0) {
+                    updateModalState(currentCourse, currentTopicIndex - 1);
+                }
+            });
+
+            nextTopicBtn.addEventListener('click', () => {
+                if (nextTopicBtn.disabled) return;
+                const isLastTopic = currentTopicIndex === currentCourse.topics.length - 1;
+
+                if (isLastTopic) {
+                    showCompletionScreen();
+                } else {
+                    updateModalState(currentCourse, currentTopicIndex + 1);
+                }
+            });
+            
+            const themeToggle = document.getElementById('theme-toggle');
+            themeToggle.innerHTML = `
+                <div class="relative w-6 h-6">
+                    <svg class="sun-icon h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                    <svg class="moon-icon h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                </div>
+            `;
+            
+            function updateThemeUI(theme) {
+                if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }
+            
+            themeToggle.addEventListener('click', () => {
+                const newTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+                localStorage.setItem('theme', newTheme);
+                updateThemeUI(newTheme);
+            });
+            updateThemeUI(localStorage.getItem('theme') || 'dark');
+            
+            const allNavLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
+            const navActiveBg = document.getElementById('nav-active-bg');
+            const navList = document.getElementById('nav-list');
+            
+            function updateActiveNavBg(activeLink, instant = false) {
+                if (!activeLink) return;
+                if (instant) navActiveBg.style.transition = 'none';
+                navActiveBg.style.width = `${activeLink.offsetWidth}px`;
+                navActiveBg.style.transform = `translateX(${activeLink.offsetLeft}px)`;
+                if (instant) {
+                    setTimeout(() => {
+                        navActiveBg.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                    }, 50);
+                }
+            }
+
+            function switchSection(event) {
+                event.preventDefault();
+                const targetId = event.currentTarget.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                if (!targetSection || targetSection.classList.contains('section-active')) return;
+
+                document.querySelector('.section-active')?.classList.replace('section-active', 'section-inactive');
+                targetSection.classList.replace('section-inactive', 'section-active');
+                
+                let activeDesktopLink;
+                allNavLinks.forEach(link => {
+                    const isActive = link.getAttribute('href') === targetId;
+                    link.classList.toggle('active', isActive);
+                    if (isActive && link.matches('.nav-link')) {
+                        activeDesktopLink = link;
+                    }
+                });
+                if(activeDesktopLink) updateActiveNavBg(activeDesktopLink);
+            }
+
+            allNavLinks.forEach(link => link.addEventListener('click', switchSection));
+            
+            setTimeout(() => {
+                 updateActiveNavBg(document.querySelector('.nav-link.active'), true);
+                 window.addEventListener('resize', () => updateActiveNavBg(document.querySelector('.nav-link.active'), true));
+            }, 100);
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const closeMobileMenuButton = document.getElementById('close-mobile-menu');
+            const menuOverlay = document.getElementById('menu-overlay');
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+            function openMenu() { 
+                mobileMenu.classList.remove('-translate-x-full'); 
+                menuOverlay.classList.remove('hidden'); 
+                menuOverlay.style.opacity = '1';
+            }
+            function closeMenu() { 
+                mobileMenu.classList.add('-translate-x-full'); 
+                menuOverlay.style.opacity = '0';
+                setTimeout(() => menuOverlay.classList.add('hidden'), 500);
+            }
+            mobileMenuButton.addEventListener('click', openMenu);
+            closeMobileMenuButton.addEventListener('click', closeMenu);
+            menuOverlay.addEventListener('click', closeMenu);
+            mobileNavLinks.forEach(link => link.addEventListener('click', closeMenu));
+        }
+    </script>
+     <script>
+        // CÓDIGO PARA BLOQUEAR FERRAMENTAS DO DEV
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        function checkDevTools() {
+            const threshold = 160; 
+            const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+            const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+
+            if (widthThreshold || heightThreshold) {
+                document.body.innerHTML = '<h2>Ferramentas de desenvolvedor não permitidas.</h2>';
+                document.body.style.display = 'flex';
+                document.body.style.alignItems = 'center';
+                document.body.style.justifyContent = 'center';
+                document.body.style.height = '100vh';
+                document.body.style.margin = '0';
+                document.body.style.fontFamily = 'sans-serif';
+                document.body.style.color = '#fff';
+                document.body.style.backgroundColor = '#111';
+                return true;
+            }
+            return false;
+        }
+
+        const checkInterval = setInterval(() => {
+            checkDevTools();
+        }, 1000);
+
+        window.addEventListener('keydown', (event) => {
+            if ((event.ctrlKey && event.shiftKey && event.key === 'I') || 
+                (event.key === 'F12') ||
+                (event.ctrlKey && event.shiftKey && event.key === 'J') ||
+                (event.ctrlKey && event.key === 'U')) {
+                
+                event.preventDefault();
+                
+                const isDevToolsOpen = checkDevTools();
+                if (!isDevToolsOpen) {
+                    alert('Ferramentas de desenvolvedor bloqueadas.');
+                }
+            }
+        });
+
+        if (window.devtools) {
+            window.devtools.addListener(isOpen => {
+                if (isOpen) {
+                    document.body.innerHTML = '<h2>Ferramentas de desenvolvedor detectadas e bloqueadas.</h2>';
+                    document.body.style.display = 'flex';
+                    document.body.style.alignItems = 'center';
+                    document.body.style.justifyContent = 'center';
+                    document.body.style.height = '100vh';
+                    document.body.style.margin = '0';
+                    document.body.style.fontFamily = 'sans-serif';
+                    document.body.style.color = '#fff';
+                    document.body.style.backgroundColor = '#111';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
